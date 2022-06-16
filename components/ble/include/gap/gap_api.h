@@ -31,6 +31,7 @@
 #define GAP_ADV_MODE_NON_CONN_SCAN          0x04    /// scannalbe & non-connectable
 #define GAP_ADV_MODE_HDC_DIRECT             0x05    /// non-scannalbe & connectable
 #define GAP_ADV_MODE_BEACON                 0x06    /// non-scannalbe & non-connectable
+#define GAP_ADV_MODE_CUSTOM                 0x07    /// scannalbe & connectable & custom adv type flags
 
 #define GAP_ADV_MODE_EXTEND_CONN_UNDIRECT   0x11
 #define GAP_ADV_MODE_EXTEND_CONN_DIRECT     0x12

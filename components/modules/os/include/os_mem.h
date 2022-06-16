@@ -15,6 +15,16 @@
 #include <stdint.h>
 #include <string.h>
 
+
+/// Used memory block delimiter structure (size must be word multiple)
+struct mblock_used
+{
+    /// Used to check if memory block has been corrupted or not
+    uint16_t corrupt_check;
+    /// Size of the current used block (including delimiter)
+    uint16_t size;
+};
+
 #if 0
 
 /*********************************************************************
@@ -92,7 +102,6 @@ uint16_t os_get_free_heap_size(void);
 void *ke_malloc(uint32_t size, uint8_t type);
 void ke_free(void *mem_ptr);
 uint16_t ke_get_mem_free(uint8_t type);
-
 
 /*********************************************************************
  * @fn      os_malloc
@@ -181,10 +190,23 @@ __STATIC __INLINE void *os_calloc(uint32_t num,uint32_t size)
  */
 __STATIC __INLINE void *os_realloc(void *ptr,uint32_t new_size)
 {
-    void *new_ptr =  ke_malloc(new_size, 3);
+    void *new_ptr =  ke_malloc(new_size, 2);
+    struct mblock_used *hdr = (void *)ptr;
+    uint16_t old_buf_size;
+    
     if(new_ptr)
     {
-        memset(new_ptr, 0, new_size);
+        if(ptr) {
+            hdr--;
+            old_buf_size = hdr->size - sizeof(struct mblock_used);
+        
+            if(old_buf_size > new_size) {
+                memcpy(new_ptr, ptr, new_size);
+            }
+            else {
+                memcpy(new_ptr, ptr, old_buf_size);
+            }
+        }
     }
     os_free(ptr);
     return new_ptr;

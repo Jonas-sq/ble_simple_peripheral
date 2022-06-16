@@ -339,14 +339,18 @@ uint16_t ANCS_AMS_gatt_msg_handler(gatt_msg_t *p_msg)
                 memcpy(ANCS_hdl_cache,p_msg->param.op.arg,12);
                 show_reg((uint8_t *)ANCS_hdl_cache,12,1);
 
-                gatt_client_enable_ntf_t ntf_enable;
-                ntf_enable.conidx = p_msg->conn_idx;
-                ntf_enable.client_id = ANCS_AMS_client_id;
-                ntf_enable.att_idx = ANCS_ATT_IDX_NTF_SRC;
-                gatt_client_enable_ntf(ntf_enable);
+				if(ANCS_hdl_cache[0] != 0)
+				{
+					gatt_client_enable_ntf_t ntf_enable;
+		            ntf_enable.conidx = p_msg->conn_idx;
+		            ntf_enable.client_id = ANCS_AMS_client_id;
+		            ntf_enable.att_idx = ANCS_ATT_IDX_NTF_SRC;
+		            gatt_client_enable_ntf(ntf_enable);
 
-                ntf_enable.att_idx = ANCS_ATT_IDX_DATA_SRC;
-                gatt_client_enable_ntf(ntf_enable);
+		            ntf_enable.att_idx = ANCS_ATT_IDX_DATA_SRC;
+		            gatt_client_enable_ntf(ntf_enable);
+				}
+                
             }
         }
         break;

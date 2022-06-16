@@ -50,6 +50,10 @@ void co_delay_100us(uint32_t num);
  */
 void co_delay_10us(uint32_t num);
 void cpu_delay_100us(uint32_t num);
+float Smoothing_Filter_handle(uint8_t filter_id,float input);
+void Smoothing_Filter_reset(uint8_t filter_id);
+void Smoothing_Filter_destroy(uint8_t filter_id);
+void Smoothing_Filter_init(uint8_t * filter_id);
 uint8_t hex4bit_to_char(const uint8_t hex_value);
 uint8_t hex4bit_to_caps_char(const uint8_t hex_value);
 

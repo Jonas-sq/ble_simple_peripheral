@@ -9,7 +9,7 @@
  */
 
 /*
- * INCLUDES (°üº¬Í·ÎÄ¼ş)
+ * INCLUDES (åŒ…å«å¤´æ–‡ä»¶)
  */
 #include <stdio.h>
 #include <string.h>
@@ -22,7 +22,7 @@
 
 
 /*
- * MACROS (ºê¶¨Òå)
+ * MACROS (å®å®šä¹‰)
  */
 #define REMOTE_CMD_UUID     {0xc2, 0x51, 0xca, 0xf7, 0x56, 0x0e, 0xdf, 0xb8, \
                                                 0x8a, 0x4a, 0xb1, 0x57, 0xd8,0x81, 0x3c, 0x9b}
@@ -32,20 +32,20 @@
                                                 0xd8, 0x46, 0xab, 0x23, 0x8c,0xf3, 0xb2, 0xc6}
 
 /*
- * CONSTANTS (³£Á¿¶¨Òå)
+ * CONSTANTS (å¸¸é‡å®šä¹‰)
  */
 
 /*
- * TYPEDEFS (ÀàĞÍ¶¨Òå)
+ * TYPEDEFS (ç±»å‹å®šä¹‰)
  */
 
 /*
- * GLOBAL VARIABLES (È«¾Ö±äÁ¿)
+ * GLOBAL VARIABLES (å…¨å±€å˜é‡)
  */
 
 
 /*
- * LOCAL VARIABLES (±¾µØ±äÁ¿)
+ * LOCAL VARIABLES (æœ¬åœ°å˜é‡)
  */
 static void AMS_gatt_write_cmd(uint8_t conidx,enum ams_att_idx att_idx,uint8_t *p_data, uint16_t len);
 static void AMS_gatt_write_req(uint8_t conidx,enum ams_att_idx att_idx,uint8_t *p_data, uint16_t len);
@@ -58,9 +58,9 @@ uint8_t AMS_client_id;
 
 /*********************************************************************
  * Profile Attributes - Table
- * Ã¿Ò»Ïî¶¼ÊÇÒ»¸öcharacteristic attribute¶ÔÓ¦µÄUUIDµÄ¶¨Òå¡£
- * µÚÒ»¸öÊÇUUIDµÄ³¤¶È£¬
- * Ã¿¶ş¸öÊÇUUIDµÄÖµ¡£
+ * æ¯ä¸€é¡¹éƒ½æ˜¯ä¸€ä¸ªcharacteristic attributeå¯¹åº”çš„UUIDçš„å®šä¹‰ã€‚
+ * ç¬¬ä¸€ä¸ªæ˜¯UUIDçš„é•¿åº¦ï¼Œ
+ * æ¯äºŒä¸ªæ˜¯UUIDçš„å€¼ã€‚
  */
 const gatt_uuid_t AMS_att_tb[] =
 {
@@ -158,15 +158,19 @@ uint16_t AMS_gatt_msg_handler(gatt_msg_t *p_msg)
                 uint16_t att_handles[3];
                 memcpy(att_handles,p_msg->param.op.arg,6);
                 show_reg((uint8_t *)att_handles,6,1);
+								
+                if(att_handles[3] != 0)
+                {
+                    gatt_client_enable_ntf_t ntf_enable;
+                    ntf_enable.conidx = p_msg->conn_idx;
+                    ntf_enable.client_id = AMS_client_id;
+                    ntf_enable.att_idx = AMS_ATT_IDX_ENT_UPDATE;
+                    gatt_client_enable_ntf(ntf_enable);
 
-                gatt_client_enable_ntf_t ntf_enable;
-                ntf_enable.conidx = p_msg->conn_idx;
-                ntf_enable.client_id = AMS_client_id;
-                ntf_enable.att_idx = AMS_ATT_IDX_ENT_UPDATE;
-                gatt_client_enable_ntf(ntf_enable);
-
-                ntf_enable.att_idx = AMS_ATT_IDX_REMOTE_CMD;
-                gatt_client_enable_ntf(ntf_enable);
+                    ntf_enable.att_idx = AMS_ATT_IDX_REMOTE_CMD;
+                    gatt_client_enable_ntf(ntf_enable);
+                }
+                
             }
             else if(p_msg->param.op.operation == GATT_OP_WRITE_REQ && p_msg->att_idx == AMS_ATT_IDX_ENT_ATT)
                 AMS_gatt_read(AMS_client_conidx,AMS_ATT_IDX_ENT_ATT);
@@ -252,10 +256,10 @@ void AMS_gatt_read(uint8_t conidx,enum ams_att_idx att_idx)
 }
 
 /*********************************************************************
- * @fn      AMS_gatt_add_client
+ * @fn      batt_gatt_add_service
  *
- * @brief   AMS Profile add GATT client function.
- *          Ìí¼ÓAMS GATT clientµ½ATTµÄÊı¾İ¿âÀïÃæ¡£
+ * @brief   Simple Profile add GATT service function.
+ *          æ·»åŠ GATT serviceåˆ°ATTçš„æ•°æ®åº“é‡Œé¢ã€‚
  *
  * @param   None.
  *

@@ -521,6 +521,18 @@ void gatt_discovery_all_peer_svc(uint8_t client_id,uint8_t conidx);
  */
 void gatt_discovery_peer_svc(uint8_t client_id, uint8_t conidx, uint8_t uuid_len, uint8_t *group_uuid);
 
+/*********************************************************************
+ * @fn      gatt_clear_remote_svc
+ *
+ * @brief   used to clear discovered characters and descriptions stored in gatt_svc_list
+ *          after connection is removed.
+ *
+ * @param   conidx  - connection index.
+ *
+ * @return  None.
+ */
+void gatt_clear_remote_svc(uint8_t conidx);
+
 
 /*********************************************************************
  * @fn      gatt_client_direct_register

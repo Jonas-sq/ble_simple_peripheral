@@ -393,7 +393,7 @@ void pmu_bg_trim(uint32_t trim_value)
 {
     uint32_t data[5];
     uint16_t ref_internal = 0,ref_avdd = 0;
-    uint8_t bg_set = 0;
+    uint16_t bg_set = 0;
     uint8_t correction_value = 0;
     uint16_t internal_adj, avdd_adj;
 
@@ -401,28 +401,32 @@ void pmu_bg_trim(uint32_t trim_value)
     {
         ref_internal = ((trim_value >> 12) & 0xfff);
         ref_avdd = (trim_value & 0xfff);
-        }
-        else
-        {
+    }
+    else
+    {
         flash_OTP_read(0x1000, 5*sizeof(uint32_t), (void *)data);
         if(data[0] == 0x31303030) {
             ref_internal = ((400*1024)/(data[3] / 32) + (800*1024)/(data[4] / 32)) / 2;
             ref_avdd = ((2400*1024)/(data[1] / 32) + (800*1024)/(data[2] / 32)) / 2;
         }
     }
-
+    
+    if(ref_avdd == 0)
+    {
+        return;
+    }
     if(ref_avdd >= 2925)
     {
         bg_set = ((ref_avdd*10-29000u)*100)/(125*29);
     }
     else if(ref_avdd < 2875)
-        {
+    {
         bg_set = ((29000u-ref_avdd*10)*100)/(125*29);
-        }
-        else
-        {
+    }
+    else
+    {
         bg_set = 0;       
-        }
+    }
     correction_value = bg_set % 10;
     bg_set = bg_set / 10;
     if(correction_value >= 5u)
@@ -445,7 +449,7 @@ void pmu_bg_trim(uint32_t trim_value)
         ref_internal += internal_adj;
         ref_avdd += avdd_adj;
     }
-
+    
     adc_set_ref_voltage(ref_avdd, ref_internal);
 }
 

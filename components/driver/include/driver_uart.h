@@ -173,7 +173,7 @@ struct uart_lcr_t   /*Line Control Register*/
 0= one stop bit after data bits
 1= 1.5 stop bit for a 5-bit data character,OR 2 stop bits for a 6-,7-,or 8-bit character.
 */
-    uint32_t stop:1;
+    uint32_t stop:1;    
 /*
 Parity Enable Bit
 1: parity check enable
