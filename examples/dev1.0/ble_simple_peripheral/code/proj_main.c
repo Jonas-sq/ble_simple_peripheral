@@ -35,6 +35,7 @@
 
 #include "ble_simple_peripheral.h"
 #include "simple_gatt_service.h"
+#include "hardware_peripheral.h"
 
 const struct jump_table_version_t _jump_table_version __attribute__((section("jump_table_3"))) = 
 {
@@ -195,6 +196,8 @@ void user_entry_before_ble_init(void)
         co_delay_100us(10000);
         co_delay_100us(10000);
     }
+		
+		hardware_peripheral_init();
 }
 
 /*********************************************************************
@@ -215,7 +218,7 @@ void user_entry_after_ble_init(void)
 
     // User task initialization, for buttons.
     user_task_init();
-    
+		
     // Application layer initialization, can included bond manager init, 
     // advertising parameters init, scanning parameter init, GATT service adding, etc.    
     simple_peripheral_init();

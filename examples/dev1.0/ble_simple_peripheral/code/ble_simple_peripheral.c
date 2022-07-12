@@ -27,6 +27,7 @@
 #include "decoder.h"
 #include "gyro_alg.h"
 #include "flash_usage_config.h"
+#include "hardware_peripheral.h"
 
 
 
@@ -77,6 +78,7 @@ static uint8_t scan_rsp_data[] =
  */
 
 os_timer_t timer_refresh;// 用于刷新传感器数据以及显示等
+os_timer_t timer_count;// 计数用定时器
 uint8_t App_Mode = PICTURE_UPDATE;//工作模式  可以通过KEY1切换
 
 /*
@@ -86,7 +88,9 @@ uint8_t App_Mode = PICTURE_UPDATE;//工作模式  可以通过KEY1切换
 /*
  * LOCAL FUNCTIONS
  */
+
 static void sp_start_adv(void);
+/* =====================  广播函数  =============================   */
 
 /*
  * EXTERN FUNCTIONS
@@ -102,13 +106,18 @@ uint8_t demo_CAPB18_APP(void);
  * @{
  */
 
+
+
+
+uint8_t sp_conidx;//蓝牙连接号conidx
+extern uint8_t sp_svc_id;//服务号
 /*********************************************************************
  * @fn      app_gap_evt_cb
  *
  * @brief   Application layer GAP event callback function. Handles GAP evnets.
- *
+ *					应用层GAP事件回调函数，处理GAP事件
  * @param   p_event - GAP events from BLE stack.
- *       
+ *       		蓝牙协议栈产生的 GAP事件
  *
  * @return  None.
  */
@@ -116,14 +125,14 @@ void app_gap_evt_cb(gap_event_t *p_event)
 {
     switch(p_event->type)
     {
-        case GAP_EVT_ADV_END:
+        case GAP_EVT_ADV_END:																													//广播结束。示例：adv_end,status:0x00
         {
-            co_printf("adv_end,status:0x%02x\r\n",p_event->param.adv_end.status);
+            co_printf("adv_end,status:0x%02x\r\n",p_event->param.adv_end.status);	
             //gap_start_advertising(0);
         }
         break;
         
-        case GAP_EVT_ALL_SVC_ADDED:
+        case GAP_EVT_ALL_SVC_ADDED:																										//所有的 service 都添加完毕。
         {
             co_printf("All service added\r\n");
             sp_start_adv();
@@ -135,15 +144,16 @@ void app_gap_evt_cb(gap_event_t *p_event)
         }
         break;
 
-        case GAP_EVT_SLAVE_CONNECT:
+        case GAP_EVT_SLAVE_CONNECT:																										//做为 slave 链接建立。示例：slave[0],connect. link_num:1
         {
+						sp_conidx = p_event->param.slave_connect.conidx;
             co_printf("slave[%d],connect. link_num:%d\r\n",p_event->param.slave_connect.conidx,gap_get_connect_num());
-			gatt_mtu_exchange_req(p_event->param.slave_connect.conidx);
+						gatt_mtu_exchange_req(p_event->param.slave_connect.conidx);
             gap_conn_param_update(p_event->param.slave_connect.conidx, 6, 6, 0, 500);
         }
         break;
 
-        case GAP_EVT_DISCONNECT:
+        case GAP_EVT_DISCONNECT:																											//链接断开， 可能是 master 或 slave。示例：Link[0] disconnect,reason:0x13
         {
             co_printf("Link[%d] disconnect,reason:0x%02X\r\n",p_event->param.disconnect.conidx
                       ,p_event->param.disconnect.reason);
@@ -156,17 +166,17 @@ void app_gap_evt_cb(gap_event_t *p_event)
         }
         break;
 
-        case GAP_EVT_LINK_PARAM_REJECT:
+        case GAP_EVT_LINK_PARAM_REJECT:																								//链接参数更新被拒绝 示例：
             co_printf("Link[%d]param reject,status:0x%02x\r\n"
                       ,p_event->param.link_reject.conidx,p_event->param.link_reject.status);
             break;
 
-        case GAP_EVT_LINK_PARAM_UPDATE:
+        case GAP_EVT_LINK_PARAM_UPDATE:																								//链接参数更新成功。 示例：Link[0]param update,interval:6,latency:0,timeout:500
             co_printf("Link[%d]param update,interval:%d,latency:%d,timeout:%d\r\n",p_event->param.link_update.conidx
                       ,p_event->param.link_update.con_interval,p_event->param.link_update.con_latency,p_event->param.link_update.sup_to);
             break;
 
-        case GAP_EVT_PEER_FEATURE:
+        case GAP_EVT_PEER_FEATURE:																										//收到对端的 feature 特性回复 示例：
             co_printf("peer[%d] feats ind\r\n",p_event->param.peer_feature.conidx);
             show_reg((uint8_t *)&(p_event->param.peer_feature.features),8,1);
             break;
@@ -191,9 +201,9 @@ void app_gap_evt_cb(gap_event_t *p_event)
 
 /*********************************************************************
  * @fn      sp_start_adv
- *
+ *					广播函数
  * @brief   Set advertising data & scan response & advertising parameters and start advertising
- *
+ *					
  * @param   None. 
  *       
  *
@@ -217,9 +227,12 @@ static void sp_start_adv(void)
 	gap_set_advertising_rsp_data(scan_rsp_data, sizeof(scan_rsp_data));
     // Start advertising
 	co_printf("Start advertising...\r\n");
-	gap_start_advertising(0);
+	gap_start_advertising(0);															//开始 BLE 广播。需要在设置完广播参数后调用。广播时间到自动停止时会产生 GAP_EVT_ADV_END 事件
 }
 
+
+
+#ifdef NO_JLINK
 /*********************************************************************
  * @fn      timer_refresh_fun
  *
@@ -315,17 +328,50 @@ void timer_refresh_fun(void *arg)
 		
 	}
 }
+#endif
+
 
 /*********************************************************************
- * @fn      simple_peripheral_init
+ * @fn      timer_count_fun
  *
- * @brief   Initialize simple peripheral profile, BLE related parameters.
+ * @brief   计数用定时处理函数.
  *
  * @param   None. 
  *       
  *
  * @return  None.
  */
+uint16_t timer_count_CNT = 0;
+void timer_count_fun(void *arg)
+{
+	timer_count_CNT++;
+	if(timer_count_CNT % 10 == 0)
+	{
+		if(gpio_porta_read() & GPIO_PIN_1)
+		{
+			gpio_porta_write(gpio_porta_read() & ~(1<<1));
+		}
+		else
+		{
+			gpio_porta_write(gpio_porta_read() | GPIO_PIN_1);
+		}
+	}
+		
+}
+
+
+
+/*********************************************************************
+ * @fn      simple_peripheral_init
+ *
+ * @brief   Initialize simple peripheral profile, BLE related parameters.
+ *					
+ * @param   None. 
+ *       
+ *
+ * @return  None.
+ */
+
 void simple_peripheral_init(void)
 {
     // set local device name
@@ -343,19 +389,19 @@ void simple_peripheral_init(void)
 	    .password = 0,
 	};
 
-	gap_security_param_init(&param);
+	gap_security_param_init(&param);																	//初始化安全绑定操作时的参数。
 
-	gap_set_cb_func(app_gap_evt_cb);
+	gap_set_cb_func(app_gap_evt_cb);																	//注册 GAP 事件在应用层的回调函数
 
-	gap_bond_manager_init(BLE_BONDING_INFO_SAVE_ADDR, BLE_REMOTE_SERVICE_SAVE_ADDR, 8, true);
-	gap_bond_manager_delete_all();
+	gap_bond_manager_init(BLE_BONDING_INFO_SAVE_ADDR, BLE_REMOTE_SERVICE_SAVE_ADDR, 8, true);	//初始化绑定管理功能。绑定管理功能启用后，会在链接建立回调事件之前进行绑定地址检查。该函数不能在user_entry_before_ble_init() 入口函数调用。
+	gap_bond_manager_delete_all();																														//删除所有存储在 flash 内的绑定设备的秘钥和设备服务信息。
 
 	mac_addr_t addr;
-	gap_address_get(&addr);
+	gap_address_get(&addr);																						//获取 ble 设备的 local mac 地址。
 	co_printf("Local BDADDR: 0x%2X%2X%2X%2X%2X%2X\r\n", addr.addr[0], addr.addr[1], addr.addr[2], addr.addr[3], addr.addr[4], addr.addr[5]);
 
 	// Adding services to database
-    sp_gatt_add_service();
+  sp_gatt_add_service();																						//添加GATT service到ATT的数据库里面。 创建ble_simple profile
 	speaker_gatt_add_service();				    //创建Speaker profile，
     
 	//按键初始化 PD6 PC5
@@ -364,15 +410,17 @@ void simple_peripheral_init(void)
 	pmu_port_wakeup_func_set(GPIO_PD6|GPIO_PC5);
 	button_init(GPIO_PD6|GPIO_PC5);
 
-	demo_LCD_APP();							            //显示屏
-	demo_CAPB18_APP();						            //气压计
-	demo_SHT3x_APP();						            //温湿度
-	gyro_dev_init();						            //加速度传感器
+	//demo_LCD_APP();							            //显示屏
+	//demo_CAPB18_APP();						            //气压计
+	//demo_SHT3x_APP();						            //温湿度
+	//gyro_dev_init();						            //加速度传感器
 	
 	//OS Timer
-	os_timer_init(&timer_refresh,timer_refresh_fun,NULL);//创建一个周期性1s定时的系统定时器
-	os_timer_start(&timer_refresh,1000,1);
-
+//	os_timer_init(&timer_refresh,timer_refresh_fun,NULL);//创建一个周期性1s定时的系统定时器
+//	os_timer_start(&timer_refresh,1000,1);
+	os_timer_init(&timer_count,timer_count_fun,NULL);//创建一个周期性100ms定时的系统定时器
+	os_timer_start(&timer_count,100,1);
 }
+
 
 

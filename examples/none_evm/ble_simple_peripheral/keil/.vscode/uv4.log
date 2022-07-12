@@ -1,0 +1,6 @@
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'ble_simple_peripheral'
+After Build - User command #1: fromelf.exe  --text  -c -o Output/ble_simple_peripheral.txt  Objects/ble_simple_peripheral.axf
+After Build - User command #2: fromelf.exe  --bin -o Output/ble_simple_peripheral.bin  Objects/ble_simple_peripheral.axf
+".\Objects\ble_simple_peripheral.axf" - 0 Error(s), 0 Warning(s).
+Build Time Elapsed:  00:00:01

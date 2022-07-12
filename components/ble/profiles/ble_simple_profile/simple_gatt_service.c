@@ -394,7 +394,7 @@ static uint16_t sp_gatt_msg_handler(gatt_msg_t *p_msg)
  * @fn      sp_gatt_add_service
  *
  * @brief   Simple Profile add GATT service function.
- *			添加GATT service到ATT的数据库里面。
+ *					添加GATT service到ATT的数据库里面。
  *
  * @param   None. 
  *        

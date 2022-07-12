@@ -208,10 +208,26 @@ static int audio_task_func(os_event_t *param)
  */
 void user_task_init(void)
 {
-    user_task_id = os_task_create(user_task_func);
+  user_task_id = os_task_create(user_task_func);
 	audio_task_id = os_task_create(audio_task_func);//创建音频任务
 }
 
 
+
+/*********************************************************************
+ * @fn      task_msg_post
+ *
+ * @brief   
+ *
+ * @param   None. 
+ *       
+ *
+ * @return  None.
+ */
+void task_msg_post(uint8_t event, uint32_t button, uint8_t cnt)
+{
+    //os_event_t button_event;
+    //struct button_msg_t msg;
+}
 
 
