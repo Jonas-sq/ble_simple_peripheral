@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060960: Last Updated: Tue Jul 12 13:33:40 2022
+;#<FEEDBACK># ARM Linker, 5060960: Last Updated: Tue Jul 12 16:29:13 2022
 ;VERSION 0.2
 ;FILE adv_check_mode.o
 __asm___16_adv_check_mode_c_9741a236____REV16 <= USED 0
@@ -68,13 +68,29 @@ __asm___23_ble_simple_peripheral_c_4fde123a____REV16 <= USED 0
 __asm___23_ble_simple_peripheral_c_4fde123a____REVSH <= USED 0
 __asm___23_ble_simple_peripheral_c_4fde123a____RRX <= USED 0
 ;FILE button.o
-button_init <= USED 0
 button_int_isr <= USED 0
-button_send_event <= USED 0
 ;FILE core_cm3_isr.o
 __asm___14_core_cm3_isr_c_5a2a0181____REV16 <= USED 0
 __asm___14_core_cm3_isr_c_5a2a0181____REVSH <= USED 0
 __asm___14_core_cm3_isr_c_5a2a0181____RRX <= USED 0
+;FILE driver_adc.o
+__asm___12_driver_adc_c_15bb8007____REV16 <= USED 0
+__asm___12_driver_adc_c_15bb8007____REVSH <= USED 0
+__asm___12_driver_adc_c_15bb8007____RRX <= USED 0
+adc_enable <= USED 0
+adc_get_ref_voltage <= USED 0
+adc_get_result <= USED 0
+adc_init <= USED 0
+;FILE driver_codec.o
+audio_speaker_codec_init <= USED 0
+codec_adc_init <= USED 0
+codec_disable_adc <= USED 0
+codec_disable_dac <= USED 0
+codec_enable_adc <= USED 0
+codec_enable_dac <= USED 0
+codec_init <= USED 0
+codec_set_vol <= USED 0
+speaker_codec_init <= USED 0
 ;FILE driver_efuse.o
 __asm___14_driver_efuse_c_9109bb6a____REV16 <= USED 0
 __asm___14_driver_efuse_c_9109bb6a____REVSH <= USED 0
@@ -117,6 +133,15 @@ iic_write_bytes_imp <= USED 0
 ;FILE driver_keyscan.o
 keyscan_init <= USED 0
 keyscan_test <= USED 0
+;FILE driver_pdm.o
+__asm___12_driver_pdm_c_0ce94caf____REV16 <= USED 0
+__asm___12_driver_pdm_c_0ce94caf____REVSH <= USED 0
+__asm___12_driver_pdm_c_0ce94caf____RRX <= USED 0
+pdm_rxfifo_rptr_clr <= USED 0
+pdm_rxfifo_wptr_clr <= USED 0
+pdm_start <= USED 0
+pdm_stop <= USED 0
+pdm_volume_ctrl <= USED 0
 ;FILE driver_pmu.o
 __asm___12_driver_pmu_c_62fa0f09____REV16 <= USED 0
 __asm___12_driver_pmu_c_62fa0f09____REVSH <= USED 0
@@ -127,7 +152,6 @@ pmu_disable_irq <= USED 0
 pmu_enable_charge <= USED 0
 pmu_get_gpio_port_value <= USED 0
 pmu_get_gpio_value <= USED 0
-pmu_port_wakeup_func_set <= USED 0
 pmu_set_aldo_voltage <= USED 0
 pmu_set_gpio_value <= USED 0
 pmu_set_led1_as_pwm <= USED 0
@@ -136,10 +160,17 @@ pmu_set_led2_as_pwm <= USED 0
 pmu_set_led2_value <= USED 0
 pmu_set_lp_clk_src <= USED 0
 pmu_set_pin_dir <= USED 0
-pmu_set_pin_pull <= USED 0
 pmu_set_pin_to_CPU <= USED 0
 pmu_set_pin_to_PMU <= USED 0
 pmu_set_port_mux <= USED 0
+;FILE driver_pmu_pwm.o
+__asm___16_driver_pmu_pwm_c_dcc31a5d____REV16 <= USED 0
+__asm___16_driver_pmu_pwm_c_dcc31a5d____REVSH <= USED 0
+__asm___16_driver_pmu_pwm_c_dcc31a5d____RRX <= USED 0
+pmu_pwm_init <= USED 0
+pmu_pwm_set_param <= USED 0
+pmu_pwm_start <= USED 0
+pmu_pwm_stop <= USED 0
 ;FILE driver_pmu_qdec.o
 pmu_qdec_autorest_cnt_flag <= USED 0
 pmu_qdec_init <= USED 0
@@ -147,6 +178,14 @@ pmu_qdec_set_debounce_cnt <= USED 0
 pmu_qdec_set_irq_type <= USED 0
 pmu_qdec_set_pin <= USED 0
 pmu_qdec_set_threshold <= USED 0
+;FILE driver_pwm.o
+__asm___12_driver_pwm_c_pwm_ctrl____REV16 <= USED 0
+__asm___12_driver_pwm_c_pwm_ctrl____REVSH <= USED 0
+__asm___12_driver_pwm_c_pwm_ctrl____RRX <= USED 0
+pwm_init <= USED 0
+pwm_start <= USED 0
+pwm_stop <= USED 0
+pwm_update <= USED 0
 ;FILE driver_rtc.o
 __asm___12_driver_rtc_c_rtc_init____REV16 <= USED 0
 __asm___12_driver_rtc_c_rtc_init____REVSH <= USED 0
@@ -155,6 +194,25 @@ rtc_alarm <= USED 0
 rtc_disalarm <= USED 0
 rtc_get_value <= USED 0
 rtc_init <= USED 0
+;FILE driver_ssp.o
+__asm___12_driver_ssp_c_1de10e88____REV16 <= USED 0
+__asm___12_driver_ssp_c_1de10e88____REVSH <= USED 0
+__asm___12_driver_ssp_c_1de10e88____RRX <= USED 0
+ssp_clear_isr_status <= USED 0
+ssp_cs_ctrl_function <= USED 0
+ssp_disable_interrupt <= USED 0
+ssp_enable_interrupt <= USED 0
+ssp_get_data_ <= USED 0
+ssp_get_isr_status <= USED 0
+ssp_init_ <= USED 0
+ssp_put_data_to_fifo <= USED 0
+ssp_recv_data <= USED 0
+ssp_send_120Bytes <= USED 0
+ssp_send_byte <= USED 0
+ssp_send_bytes <= USED 0
+ssp_send_data <= USED 0
+ssp_send_then_recv <= USED 0
+ssp_wait_send_end <= USED 0
 ;FILE driver_timer.o
 __asm___14_driver_timer_c_89f15fa2____REV16 <= USED 0
 __asm___14_driver_timer_c_89f15fa2____REVSH <= USED 0
@@ -280,6 +338,13 @@ gatt_svc_changed_req <= USED 0
 ;FILE gattc.o
 gattc_get_op_seq_num <= USED 0
 ;FILE gattm.o
+;FILE jp_peripheral.o
+GPIO_SetBits <= USED 0
+JP_adc_init <= USED 0
+__asm___15_jp_peripheral_c_69d122b8____REV16 <= USED 0
+__asm___15_jp_peripheral_c_69d122b8____REVSH <= USED 0
+__asm___15_jp_peripheral_c_69d122b8____RRX <= USED 0
+adc_tim_fn <= USED 0
 ;FILE jump_table.o
 __asm___12_jump_table_c_5f817404____REV16 <= USED 0
 __asm___12_jump_table_c_5f817404____REVSH <= USED 0

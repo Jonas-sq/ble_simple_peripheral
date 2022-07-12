@@ -1,0 +1,64 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 2, 3, LIC=NQQMA-17UST-63QMB-28HYM-LZ2PR-P0WXZ
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      Segger\JL2CM3.dll V2.99.40.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+d:\21179\Desktop\Jonas\FR801xH-SDK\examples\none_evm\ble_audio_adc\keil\ble_simple_peripheral.uvproj
+Project File Date:  07/12/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'ble_simple_peripheral'
+compiling user_task.c...
+compiling driver_keyscan.c...
+compiling driver_pmu_qdec.c...
+compiling button.c...
+compiling driver_rtc.c...
+compiling driver_iic.c...
+compiling proj_main.c...
+..\code\proj_main.c(295): warning:  #188-D: enumerated type mixed with another type
+      pmu_set_aldo_voltage(PMU_ALDO_MODE_BYPASS, 0x00);
+..\code\proj_main.c(297): warning:  #223-D: function "codec_adc_init" declared implicitly
+      codec_adc_init(CODEC_SAMPLE_RATE_48000);
+..\code\proj_main.c: 2 warnings, 0 errors
+compiling driver_wdt.c...
+compiling driver_pmu.c...
+compiling driver_uart.c...
+assembling app_boot_vectors.s...
+compiling driver_exti.c...
+compiling driver_i2s.c...
+compiling driver_codec.c...
+compiling driver_efuse.c...
+compiling driver_timer.c...
+compiling core_cm3_isr.c...
+..\..\..\..\components\modules\platform\source\core_cm3_isr.c(13): warning:  #223-D: function "co_delay_100us" declared implicitly
+      co_delay_100us(500);
+..\..\..\..\components\modules\platform\source\core_cm3_isr.c: 1 warning, 0 errors
+compiling patch.c...
+linking...
+Program Size: Code=94952 RO-data=3788 RW-data=1752 ZI-data=3340  
+After Build - User command #1: fromelf.exe  --text  -c -o Output/ble_simple_peripheral.txt  Objects/ble_simple_peripheral.axf
+After Build - User command #2: fromelf.exe  --bin -o Output/ble_simple_peripheral.bin  Objects/ble_simple_peripheral.axf
+".\Objects\ble_simple_peripheral.axf" - 0 Error(s), 3 Warning(s).
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

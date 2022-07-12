@@ -1,3 +1,8 @@
 {
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "jp_peripheral.h": "c",
+        "button.h": "c",
+        "os_timer.h": "c"
+    }
 }

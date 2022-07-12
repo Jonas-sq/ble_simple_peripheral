@@ -29,6 +29,8 @@
 #include "ble_simple_peripheral.h"
 #include "simple_gatt_service.h"
 
+#include "jp_peripheral.h"
+
 /*
  * LOCAL VARIABLES
  */
@@ -117,15 +119,8 @@ __attribute__((section("ram_code"))) void user_entry_before_sleep_imp(void)
  */
 __attribute__((section("ram_code"))) void user_entry_after_sleep_imp(void)
 {
-    /* set PA2 and PA3 for AT command interface */
-    //system_set_port_pull(GPIO_PA2, true);
-    //system_set_port_mux(GPIO_PORT_A, GPIO_BIT_2, PORTA2_FUNC_UART1_RXD);
-    system_set_port_mux(GPIO_PORT_A, GPIO_BIT_3, PORTA3_FUNC_UART1_TXD);
-    
-    uart_init(UART1, BAUD_RATE_115200);
-    //NVIC_EnableIRQ(UART1_IRQn);
-		uart_putc_noint_no_wait(UART1, 'w');
-    // Do some things here, can be uart print
+    /*调试串口初始化*/
+    JP_UART1_init();
 
     NVIC_EnableIRQ(PMU_IRQn);
 }
@@ -157,12 +152,10 @@ void user_entry_before_ble_init(void)
                    | PMU_ISR_BIT_BAT
                    | PMU_ISR_BIT_ONKEY_HIGH);
     NVIC_EnableIRQ(PMU_IRQn);
+
+    /*所有外设初始化*/
+    JP_peripheral_init();
     
-    // Enable UART print.
-    //system_set_port_pull(GPIO_PA2, true);
-    //system_set_port_mux(GPIO_PORT_A, GPIO_BIT_2, PORTA2_FUNC_UART1_RXD);
-    system_set_port_mux(GPIO_PORT_A, GPIO_BIT_3, PORTA3_FUNC_UART1_TXD);
-    uart_init(UART1, BAUD_RATE_115200);    
 }
 
 /*********************************************************************

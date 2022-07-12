@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\components\ble\include;..\..\..\..\components\driver\include;..\..\..\..\components\modules\os\include;..\..\..\..\components\modules\sys\include;..\..\..\..\components\modules\platform\include;..\..\..\..\components\modules\common\include;..\..\..\..\components\modules\lowpow\include;..\..\..\..\components\modules\button;..\..\..\..\components\ble\include\gap;..\..\..\..\components\ble\include\gatt;..\..\..\..\components\ble\profiles\ble_simple_profile;..\code</IncludePath>
+              <IncludePath>..\..\..\..\components\ble\include;..\..\..\..\components\driver\include;..\..\..\..\components\modules\os\include;..\..\..\..\components\modules\sys\include;..\..\..\..\components\modules\platform\include;..\..\..\..\components\modules\common\include;..\..\..\..\components\modules\lowpow\include;..\..\..\..\components\modules\button;..\..\..\..\components\ble\include\gap;..\..\..\..\components\ble\include\gatt;..\..\..\..\components\ble\profiles\ble_simple_profile;..\code;..\code\peripheral</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -407,6 +407,11 @@
               <FileName>button.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\modules\button\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>jp_peripheral.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\peripheral\jp_peripheral.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -483,6 +488,41 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\components\driver\driver_efuse.c</FilePath>
             </File>
+            <File>
+              <FileName>driver_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_codec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_codec.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_pdm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_pdm.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_pmu_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_pmu_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_ssp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_ssp.c</FilePath>
+            </File>
+            <File>
+              <FileName>driver_system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\components\driver\driver_system.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -529,5 +569,14 @@
     <components/>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>ble_simple_peripheral</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>
